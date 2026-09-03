@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iPhone 상용 기능 가이드 — 기획·개발용</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --bg-elev: #1a222c;
+      --bg-soft: #243040;
+      --text: #e8eef4;
+      --muted: #9aabbc;
+      --accent: #5eb1ff;
+      --accent-2: #3dd6c6;
+      --line: #2c3a4a;
+      --warn: #f0b429;
+      --ok: #6bcb8b;
+      --max: 46rem;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #1a3a55 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, #14352f 0%, transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      max-width: calc(var(--max) + 14rem);
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 5rem;
+      display: grid;
+      grid-template-columns: 13rem 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    nav.toc {
+      position: sticky;
+      top: 1.25rem;
+      max-height: calc(100vh - 2.5rem);
+      overflow: auto;
+      font-size: 0.85rem;
+      line-height: 1.45;
+      padding-right: 0.5rem;
+    }
+    nav.toc strong {
+      display: block;
+      margin-bottom: 0.75rem;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+    }
+    nav.toc a {
+      display: block;
+      color: var(--muted);
+      padding: 0.28rem 0;
+      border-left: 2px solid transparent;
+      padding-left: 0.65rem;
+    }
+    nav.toc a:hover { color: var(--text); border-left-color: var(--accent); text-decoration: none; }
+
+    main { max-width: var(--max); min-width: 0; }
+
+    header.hero {
+      margin-bottom: 2.75rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--line);
+    }
+    header.hero p.eyebrow {
+      margin: 0 0 0.75rem;
+      color: var(--accent-2);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+    header.hero h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(1.85rem, 4vw, 2.55rem);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+    }
+    header.hero .lede {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    section {
+      margin: 2.75rem 0;
+      scroll-margin-top: 1.5rem;
+    }
+    section h2 {
+      margin: 0 0 0.85rem;
+      font-size: 1.55rem;
+      letter-spacing: -0.02em;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 0.55rem;
+    }
+    section h3 {
+      margin: 1.75rem 0 0.55rem;
+      font-size: 1.15rem;
+      color: #d5e4f2;
+    }
+    section p, section li { color: var(--text); }
+    section p.note {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem;
+      margin: 1rem 0;
+    }
+    .card h4 {
+      margin: 0 0 0.4rem;
+      font-size: 1.02rem;
+    }
+    .card p { margin: 0.4rem 0 0; }
+    .card .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.75rem;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: var(--bg-soft);
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    .tag.hot { background: #2a3f2f; color: var(--ok); }
+    .tag.pro { background: #3a3420; color: var(--warn); }
+    .tag.api { background: #1e3348; color: var(--accent); }
+
+    ul.dense { padding-left: 1.2rem; }
+    ul.dense li { margin: 0.35rem 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin: 1rem 0;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: var(--bg-elev); color: var(--muted); font-weight: 600; }
+    td { background: rgba(26, 34, 44, 0.45); }
+
+    .callout {
+      border-left: 3px solid var(--accent-2);
+      padding: 0.85rem 1rem;
+      margin: 1.25rem 0;
+      background: rgba(61, 214, 198, 0.06);
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.warn {
+      border-left-color: var(--warn);
+      background: rgba(240, 180, 41, 0.07);
+    }
+
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .wrap {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      nav.toc {
+        position: static;
+        max-height: none;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 1rem;
+        background: var(--bg-elev);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 1rem;
+      }
+      nav.toc strong { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="toc" aria-label="목차">
+      <strong>목차</strong>
+      <a href="#intro">이 문서의 목적</a>
+      <a href="#how-to-read">읽는 법</a>
+      <a href="#ui">화면·시스템 UI</a>
+      <a href="#camera">카메라·미디어</a>
+      <a href="#vision-ml">인식·온디바이스 ML</a>
+      <a href="#ar-3d">AR·3D·공간</a>
+      <a href="#location">위치·지도</a>
+      <a href="#sensors">센서·모션</a>
+      <a href="#health">건강·운동</a>
+      <a href="#auth-pay">인증·결제</a>
+      <a href="#notify">알림·라이브</a>
+      <a href="#connect">연결·근거리</a>
+      <a href="#data">데이터·클라우드</a>
+      <a href="#background">백그라운드</a>
+      <a href="#intents">Siri·단축어</a>
+      <a href="#extensions">확장·위젯</a>
+      <a href="#limits">권한·심사·한계</a>
+      <a href="#stack">기술 스택 감각</a>
+      <a href="#map">기획 체크 맵</a>
+    </nav>
+
+    <main>
+      <header class="hero">
+        <p class="eyebrow">iOS / iPhone · 상용 기능 중심</p>
+        <h1>아이폰이 앱에게 열어주는 것들</h1>
+        <p class="lede">
+          “무엇이 가능한지”를 기획·제품 관점에서 길게 정리한 가이드입니다.
+          모든 API를 나열하지 않고, <strong>실제로 자주 제품화되는 능력</strong>과
+          그 능력이 만드는 사용자 경험, 제약까지 묶었습니다.
+          LiDAR처럼 “신기한 한 방”이 아니라, 상용 앱에서 반복적으로 쓰이는 층위를 중심으로 합니다.
+        </p>
+      </header>
+
+      <section id="intro">
+        <h2>1. 이 문서의 목적</h2>
+        <p>
+          아이폰 앱을 잘 만든다는 건 두 층이 겹칩니다. 하나는 SwiftUI·네비게이션·상태관리 같은
+          <em>앱을 조립하는 정석</em>이고, 다른 하나는 카메라·AR·결제·알림·위젯처럼
+          <em>기기가 열어주는 능력</em>을 제품 경험으로 바꾸는 일입니다.
+        </p>
+        <p>
+          이 문서는 후자에 가깝습니다. “RoomPlan이 뭐지?”를 외우는 게 아니라,
+          <strong>저런 게 있으면 어떤 서비스가 성립하는가</strong>를 머릿속에 지도를 만드는 용도입니다.
+          구현 세부·최신 API 시그니처는 그때그때 문서/검색이 더 정확합니다.
+          여기서는 <strong>가능 범위와 상용 패턴</strong>을 깊게 가져가면 됩니다.
+        </p>
+        <div class="callout">
+          <strong>한 줄 요약:</strong> 기능을 “안다”는 것은 API 암기가 아니라,
+          “이 제품은 카메라 권한이 핵심이다 / 이건 Pro + LiDAR가 없으면 약하다 /
+          이건 위젯으로 재방문시킨다”처럼 <em>기획 가설을 기기 능력에 고정</em>할 수 있다는 뜻입니다.
+        </div>
+      </section>
+
+      <section id="how-to-read">
+        <h2>2. 읽는 법 · 태그 의미</h2>
+        <ul class="dense">
+          <li><span class="tag hot">상용 빈도 높음</span> — 많은 카테고리 앱에서 반복적으로 등장</li>
+          <li><span class="tag pro">기기/모델 제약</span> — Pro, LiDAR, 최신 OS, 특정 칩 등</li>
+          <li><span class="tag api">대표 프레임워크</span> — 구현 시 찾아볼 이름</li>
+        </ul>
+        <p class="note">
+          아래 각 기능 카드는 “무엇을 할 수 있는가 → 어떤 제품에 자주 쓰이는가 → 기획할 때 조심할 점” 순입니다.
+        </p>
+      </section>
+
+      <section id="ui">
+        <h2>3. 화면 · 시스템 UI</h2>
+        <p>
+          가장 흔한 “아이폰 기능”은 사실 센서가 아니라 <strong>시스템과 같은 언어로 말하는 UI</strong>입니다.
+          사용자가 “아이폰 앱답다”고 느끼는 대부분은 여기입니다.
+        </p>
+
+        <div class="card">
+          <h4>SwiftUI / UIKit 화면 구성</h4>
+          <p>
+            리스트, 폼, 탭, 네비게이션 스택, 시트(모달), 풀스크린 커버, 검색, 스와이프 뒤로가기.
+            신규 앱은 SwiftUI가 주류이고, 카메라·커스텀 렌더·레거시는 UIKit/Metal과 혼용합니다.
+          </p>
+          <p>
+            <strong>상용 패턴:</strong> 온보딩 → 탭바 홈 → 상세 → 설정.
+            커머스·콘텐츠·유틸리티 거의 전부 이 뼈대입니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">SwiftUI · UIKit</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>시스템 공유 · 문서 열기 · 사진 선택</h4>
+          <p>
+            Share Sheet로 다른 앱에 보내기, Files에서 파일 고르기, Photos 피커로 이미지/영상 선택,
+            Document Scanner로 종이 스캔. “우리 앱 안에 다 구현”보다 OS가 주는 UI를 쓰는 편이
+            신뢰·심사·개발비용에서 유리한 경우가 많습니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">PhotosUI · UniformTypeIdentifiers · VisionKit</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>다크모드 · Dynamic Type · 접근성</h4>
+          <p>
+            글자 크기 확대, VoiceOver, Reduce Motion. “기능”처럼 안 보이지만
+            상용 앱·특히 금융/헬스케어/공공성 있는 서비스에서는 사실상 필수에 가깝습니다.
+            기획 단계에서 폰트·대비·제스처 의존도를 미리 보면 나중에 덜 깨집니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">Accessibility · Dynamic Type</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>홈 화면 위젯 · Lock Screen 위젯</h4>
+          <p>
+            앱을 안 열어도 정보/ Habit / 단축 진입을 보여줍니다.
+            날씨, 캘린더, 금융 잔고 요약, 습관 스트릭, 배송 상태처럼
+            <strong>재방문 유도</strong>가 목적인 제품에서 상용화 빈도가 높습니다.
+            위젯은 상호작용이 제한적이고 갱신 주기에 제약이 있어 “작은 대시보드”로 설계해야 합니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">WidgetKit</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Live Activities · Dynamic Island</h4>
+          <p>
+            배달 현황, 스포츠 스코어, 타이머, 탑승 게이트, 운동 세션처럼
+            <strong>지금 진행 중인 일</strong>을 잠금화면·다이나믹 아일랜드에 붙입니다.
+            알림보다 “계속 눈에 띄는 상태”가 필요할 때 강력한 차별점입니다.
+            시작/종료 조건·배터리·남용 시 사용자 피로를 기획에 넣어야 합니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">ActivityKit</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>App Clip</h4>
+          <p>
+            앱 설치 없이 작은 기능만 즉시 실행(QR, NFC, 사파리 배너, 지도 등).
+            매장 주문, 렌탈 잠금해제, 이벤트 체크인처럼
+            <strong>설치 장벽을 낮추는 순간 경험</strong>에 쓰입니다.
+            용량·API 제한이 있어 “미니 앱”으로 범위를 잘라야 합니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">App Clips</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="camera">
+        <h2>4. 카메라 · 미디어</h2>
+        <p>
+          스마트폰 앱의 고전적 해자입니다. “촬영 → 편집 → 저장/공유” 파이프라인은
+          SNS, 커머스(상품 사진), 문서, 인증, QR, 뷰티, 홈 인테리어까지  Broad하게 상용화됩니다.
+        </p>
+
+        <div class="card">
+          <h4>사진·영상 촬영 / 커스텀 카메라 UI</h4>
+          <p>
+            시스템 카메라 앱을 여는 수준을 넘어, 가이드 오버레이·연속 촬영·해상도·프레임레이트·손떨림
+            등을 앱이 통제하려면 AVFoundation 기반 커스텀 카메라가 필요합니다.
+            QR 고속 스캔, 측량 가이드, 뷰티 필터 프리뷰 등이 전형적입니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">AVFoundation · AVCaptureSession</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>사진 라이브러리 읽기/쓰기</h4>
+          <p>
+            최근 항목만 접근, 제한된 라이브러리, 저장 위치(앨범) 등 프라이버시 모델이 강화되어 있습니다.
+            “갤러리 전체 훑기”형 기능은 권한 설득 카피가 제품의 일부가 됩니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">PhotoKit · PhotosUI</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>마이크 · 음성 메모 · 통화 품질 오디오</h4>
+          <p>
+            녹음, 음성 메시지, 음악 앱, 회의 노트. 백그라운드 녹음은 정책·심사·고지가 민감합니다.
+            음성→텍스트는 온디바이스 음성인식 또는 서버 STT와 결합하는 상용 패턴이 많습니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">AVAudioSession · Speech</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>QR / 바코드 / 문서 스캔</h4>
+          <p>
+            결제, 티켓, 재고, 로그인, 포장 추적. Vision/AVFoundation으로 실시간 디코드하거나
+            VisionKit 문서 스캐너로 “종이 → 깔끔한 이미지/PDF”를 만듭니다.
+            단순 QR 한 장이면 시스템 수준으로도 충분하고,
+            고밀도·연속 스트림·특수 코드는 별도 설계가 필요합니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">Vision · AVFoundation · VisionKit</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="vision-ml">
+        <h2>5. 인식 · 온디바이스 머신러닝</h2>
+        <p>
+          “AI 앱”이 아니어도, 상용 앱은 이미 많이 기기에 판단을 맡깁니다.
+          서버로 보내면 지연·비용·프라이버시 이슈가 생기므로
+          <strong>가벼운 인식은 온디바이스</strong>가 기본 선택지가 되는 경우가 많습니다.
+        </p>
+
+        <div class="card">
+          <h4>얼굴·텍스트·사물·포즈 등 비전 태스크</h4>
+          <p>
+            OCR(영수증, 명함), 사람 영역 분리, 문서 감지, 바코드, 이미지 분류.
+            번역 카메라, 가계부 영수증, 커머스 검색, 운동 자세 코칭 등에 상용화됩니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">Vision · VisionKit</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Core ML 커스텀 모델</h4>
+          <p>
+            앱 전용 분류기/탐지기/추천 후보 생성. 모델 크기·발열·구형 기기 성능이 제품 범위를 정합니다.
+            “모든 아이폰에서 동일 품질”을 약속하기 어렵다는 점을 기획에 명시하는 게 좋습니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">Core ML · Create ML</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>자연어 · 번역 · 받아쓰기</h4>
+          <p>
+            온디바이스 언어 처리, 번역 API, 키보드 받아쓰기 연동.
+            노트·메신저·학습·여행 앱에서 보조 기능으로 자주 붙습니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">Natural Language · Translation · Speech</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="ar-3d">
+        <h2>6. AR · 3D · 공간 (LiDAR 포함)</h2>
+        <p>
+          당신이 LiDAR에서 느낀 “신박함”이 여기에 해당합니다.
+          다만 상용에서는 <strong>와우 데모</strong>와 <strong>반복 사용 유틸리티</strong>가 갈립니다.
+          성공하는 쪽은 대개 “예쁜 3D”보다 <strong>측정·배치·스캔·미리보기</strong>처럼 효용이 뚜렷한 경우입니다.
+        </p>
+
+        <div class="card">
+          <h4>ARKit — 세계 추적 · 평면 감지 · 앵커</h4>
+          <p>
+            카메라로 현실을 보고, 그 위에 가상의 점/면/물체를 고정합니다.
+            가구 배치 미리보기, 교육, 게임, 매장 네비게이션, 포켓몬고류 위치AR의 기반입니다.
+            조명 추정, 이미지/오브젝트 트래킹, 페이스 트래킹(전면) 등 세부 능력이 많습니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">ARKit</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>RealityKit — 렌더링 · 엔티티 · 인터랙션</h4>
+          <p>
+            AR/3D 장면을 현대적으로 그리는 쪽. 모델 불러오기, 물리, 탭 제스처, USDZ 콘텐츠.
+            “ARKit이 현실 이해, RealityKit이 가상 표현”에 가깝게 이해하면 기획이 쉽습니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">RealityKit · USDZ</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>LiDAR · scene depth</h4>
+          <p>
+            빛이 돌아오는 시간으로 깊이(공간 거리)를 더 안정적으로 얻습니다.
+            어두운 곳·텍스처 없는 벽에서도 평면/메시가 잘 잡히는 편이라
+            측정, 오클루전(가상이 현실 소파 뒤에 가림), 룸 스캔 품질이 올라갑니다.
+          </p>
+          <p>
+            <strong>기획 함정:</strong> 모든 아이폰에 있지 않습니다. Pro 라인 등 모델 제약이 있어
+            “전 사용자 필수 경로”로 두면 시장이 줄고, “있으면 더 정확”으로 두면 제품이 건강합니다.
+          </p>
+          <div class="meta">
+            <span class="tag pro">기기/모델 제약</span>
+            <span class="tag api">ARKit depth · LiDAR</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>RoomPlan — 방 스캔 → 구조화 모델</h4>
+          <p>
+            방을 비추며 걸으면 벽·문·창·가구 대략을 구조화된 데이터/3D로 줍니다.
+            인테리어, 이사, 부동산, 리모델링 견적, 스마트홈 배치 같은
+            <strong>“공간을 데이터로 만드는”</strong> 상용 시나리오에 직접적입니다.
+            캡처는 실기기 iOS 앱이 필요하고, 결과물을 웹/에디터로 넘기는 파이프라인이 제품의 절반입니다.
+          </p>
+          <div class="meta">
+            <span class="tag pro">기기/모델 제약</span>
+            <span class="tag api">RoomPlan</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Object Capture / 포토그램메트리</h4>
+          <p>
+            물건을 여러 각도 사진으로 찍어 3D 모델화. 커머스 상품 뷰어, 아카이빙, 제작 파이프라인.
+            촬영 품질·조명·후처리가 서비스 품질을 좌우합니다. “버튼 하나면 박물관급”은 보통 아닙니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">Object Capture · RealityKit</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>측정 (Measure류)</h4>
+          <p>
+            길이·면적 측정. DIY, 물류, 인테리어 견적 보조. LiDAR가 있으면 체감 정확도·안정성이 좋아지는 편이나
+            법적/공사 수준의 정밀도를 약속하면 위험합니다. UX 카피에 “대략/참고용”이 중요한 카테고리입니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">ARKit</span>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <strong>상용 AR의 현실:</strong> 데모는 쉽고 리텐션은 어렵습니다.
+          조도, 넓은 유리, 흰 벽, 사용자 촬영 스킬, 모델 용량, 열/배터리가 품질을 흔듭니다.
+          “AR이 메인”보다 “업무를 끝내는 수단으로 AR 한 방”이 상용에서 더 자주 이깁니다.
+        </div>
+      </section>
+
+      <section id="location">
+        <h2>7. 위치 · 지도 · 이동</h2>
+
+        <div class="card">
+          <h4>위치 권한 · 백그라운드 위치</h4>
+          <p>
+            지도, 러닝, 배달, 동네 기반 발견, 분실 방지, 지오펜스(특정 구역 출입 알림).
+            “앱 사용 중”과 “항상” 권한의 심리적·심사적 허들이 전혀 다릅니다.
+            항상 위치가 필요하면 가치 제안이 매우 선명해야 합니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">Core Location</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>MapKit · 경로 · 검색</h4>
+          <p>
+            지도 표시, 어노테이션, 경로, 로컬 검색. 네이버/카카오/구글 SDK를 쓰는 국내 상용도 많지만,
+            시스템 MapKit만으로도 충분한 유틸·내부 툴이 많습니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">MapKit</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>지오펜싱 · 비콘성 근접</h4>
+          <p>
+            매장 도착 쿠폰, 자동 체크인, 구역 진입 시 로그. 배터리와 false positive를 어떻게 줄일지가 제품입니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">Core Location · (Bluetooth)</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="sensors">
+        <h2>8. 센서 · 모션 · 근접</h2>
+
+        <div class="card">
+          <h4>가속도·자이로·자세 (Core Motion)</h4>
+          <p>
+            걸음, 흔들기 제스처, 게임 조작, 운동 트래킹 보조, 화면 방향 보정.
+            Health/피트니스·게임·측량 보정에 자주 붙습니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">Core Motion</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>근접 센서 · 조도 · 배터리/열 (간접)</h4>
+          <p>
+            통화 시 화면 끄기 같은 시스템 동작에 가깝고, 앱이 직접 “제품 기능”으로 쓰기보다
+            촬영/AR 품질(조도)이나 성능 저하 대응 같은 운영 이슈로 만나는 경우가 많습니다.
+          </p>
+        </div>
+
+        <div class="card">
+          <h4>햅틱 (Taptic Engine)</h4>
+          <p>
+            성공/실패/선택 변경의 촉각 피드백. 결제 완료, 스냅 정렬, 게임 타격감.
+            작지만 상용 앱의 “손맛”을 좌우합니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">UIFeedbackGenerator · Core Haptics</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="health">
+        <h2>9. 건강 · 운동 · 헬스케어</h2>
+
+        <div class="card">
+          <h4>HealthKit 연동</h4>
+          <p>
+            걸음, 심박수, 수면, 운동 기록 읽기/쓰기. 피트니스·다이어트·의료 인접·보험 웰니스 앱의 허브입니다.
+            데이터 권한이 세분되어 있고, 의료기기급 주장은 규제·심사 리스크가 큽니다.
+            “건강 참고용”과 “진단”을 기획 언어에서 분리해야 합니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">HealthKit</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>운동 세션 · AirPods/워치 연계 감각</h4>
+          <p>
+            아이폰 단독보다 Apple Watch·이어폰과 묶일 때 데이터가 풍부해집니다.
+            아이폰만의 제품으로 시작해도, 로드맵에 워치를 둘지 mid-term에 결정하는 편이 좋습니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">HealthKit · Workout · WatchConnectivity</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="auth-pay">
+        <h2>10. 인증 · 보안 · 결제</h2>
+
+        <div class="card">
+          <h4>Face ID / Touch ID / 기기 암호</h4>
+          <p>
+            앱 잠금, 이체 확인, 민감 노트. 로컬 인증은 “우리 서버 로그인”과 별층입니다.
+            금융·업무·헬스·다이어리류에서 거의 표준 옵션입니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">LocalAuthentication</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Sign in with Apple</h4>
+          <p>
+            소셜 로그인을 제공하는 앱에서 자주 요구·권장되는 로그인 옵션.
+            프라이버시(숨기기 이메일) 때문에 계정 운영 설계가 달라집니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">AuthenticationServices</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Keychain · 보안 저장</h4>
+          <p>
+            토큰·비밀키를 일반 UserDefaults에 두지 않기. 상용 앱 보안의 기본기입니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">Keychain Services</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>In-App Purchase · 구독 (StoreKit)</h4>
+          <p>
+            디지털 재화·구독·프로 기능 해금. 커머스 “실물 배송”은 보통 웹/외부 결제와 경계가 있습니다.
+            구독 고지, 복원 구매, 무료 체험, 영수증 검증이 제품·운영의 큰 덩어리입니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">StoreKit 2</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Apple Pay</h4>
+          <p>
+            실물/서비스 결제 UX를 짧게. 커머스·티켓·도네이션.
+            가맹·PG·국가 제약이 기획 범위에 들어옵니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">PassKit · Apple Pay</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Wallet 패스 (보드딩패스·쿠폰·티켓)</h4>
+          <p>
+            잠금화면 근처 시각에 나타나거나 바코드로 스태프가 스캔. 항공, 이벤트, 멤버십, 쿠폰 상용화.
+          </p>
+          <div class="meta">
+            <span class="tag api">PassKit</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="notify">
+        <h2>11. 알림 · 실시간 상태</h2>
+
+        <div class="card">
+          <h4>로컬 알림 · 푸시 알림</h4>
+          <p>
+            리마인더, 채팅, 마케팅, 트랜잭션(배송/결제). 권한 요청 타이밍이 전환율을 좌우합니다.
+            “첫 실행 즉시 요청”은 상용에서 점점 비추천 쪽으로 갑니다. 가치를 보여준 뒤 요청이 정석에 가깝습니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">UserNotifications · APNs</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>알림 액션 · 그룹핑 · 타임 Sensible한 중단</h4>
+          <p>
+            알림에서 바로 답장/완료, 스레드 묶기, 집중 모드와의 공존.
+            “울리기만 하는 앱”과 “운영 가능한 알림 시스템”은 다릅니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Live Activities (재강조)</h4>
+          <p>
+            알림이 “이벤트”라면 Live Activity는 “진행형 상태”입니다.
+            배달·스포츠·타이머·탑승처럼 끝점이 있는 세션에 상용 빈도가 높습니다.
+          </p>
+        </div>
+      </section>
+
+      <section id="connect">
+        <h2>12. 연결 · 근거리 · 외부 기기</h2>
+
+        <div class="card">
+          <h4>네트워크 · 인증된 API 통신</h4>
+          <p>
+            당연하지만 상용 앱의 중심. 백그라운드 전송, 대기 중 좋은 UX, 오프라인 캐시가
+            “기능 목록”에 잘 안 적혀도 제품 품질을 결정합니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">URLSession · Network.framework</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>NFC</h4>
+          <p>
+            태그 읽기(읽기 중심이 흔함), 페어링, 체크인, 포스터 탭.
+            결제 단말을 앱이 마음대로 만드는 수준과는 별개입니다. 읽기 UX·태그 콘텐츠 설계가 핵심.
+          </p>
+          <div class="meta">
+            <span class="tag api">Core NFC</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Bluetooth (Core Bluetooth)</h4>
+          <p>
+            웨어러블, IoT 전구, 자전거 센서, 의료 기기, 스마트락.
+            펌웨어·연결 안정성·OS 백그라운드 제약이 개발비의 대부분인 경우가 많습니다.
+            “블루투스 앱”은 모바일 앱이라기보다 하드웨어 제품에 가깝게 일정이 나갑니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">Core Bluetooth</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>AirDrop · Nearby 상호작용 감각</h4>
+          <p>
+            시스템 공유에 편승하거나, 근접 기반 페어링 UX를 설계. 완전한 임의 P2P 메시징을
+            앱이 자유롭게 하는 그림과는 거리가 있을 수 있으니 범위를 보수적으로 보는 게 안전합니다.
+          </p>
+        </div>
+
+        <div class="card">
+          <h4>CarPlay · 외부 디스플레이 (해당 시)</h4>
+          <p>
+            네비·오디오·메시지류. 카테고리 제한이 분명해 모든 앱이 대상은 아닙니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">CarPlay</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="data">
+        <h2>13. 데이터 · 클라우드 · 동기화</h2>
+
+        <div class="card">
+          <h4>iCloud / CloudKit</h4>
+          <p>
+            사용자 Apple ID 기반 동기화. 노트·개인 유틸·라이트 멀티디바이스에 상용.
+            복잡한 소셜 그래프·관리자 백오피스는 자체 서버가 보통 더 맞습니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">CloudKit · iCloud Drive</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>로컬 DB · 오프라인 우선</h4>
+          <p>
+            SwiftData/Core Data/SQLite/파일. 비행기 모드·지하철에서도 읽히는 앱이
+            리텐션에서 이기는 경우가 많습니다. “클라우드 필수”를 기본 가정으로 두지 않는 버릇이 좋습니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">SwiftData · Core Data</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>파일 제공자 · 문서 기반 앱</h4>
+          <p>
+            Pages처럼 파일이 중심인 앱, Files 앱에 나타나는 저장소.
+            크리에이터·생산성 툴에서 중요합니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">FileProvider · Document-based apps</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="background">
+        <h2>14. 백그라운드 실행</h2>
+        <p>
+          사용자 기대(“뒤에서 계속 돌겠지?”)와 OS 현실(배터리 때문에 많이 죽임) 사이 간극이 큽니다.
+          상용 앱은 <strong>백그라운드 모드를 꼭 필요한 유형만</strong> 켜고, 그 밖의 일은
+          푸시·BGTask·사일런트 푸시·다음 포그라운드 동기화로 설계합니다.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>유형</th>
+              <th>상용 예</th>
+              <th>기획 시 주의</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>오디오</td>
+              <td>음악, 팟캐스트, 네비 음성</td>
+              <td>실제 오디오 세션이 있어야 정당화</td>
+            </tr>
+            <tr>
+              <td>위치</td>
+              <td>러닝, 배달 트래킹</td>
+              <td>“항상” 권한 설득 비용 큼</td>
+            </tr>
+            <tr>
+              <td>BLE 액세서리</td>
+              <td>IoT, 웨어러블</td>
+              <td>하드웨어 없이는 의미 약함</td>
+            </tr>
+            <tr>
+              <td>BG 처리/새로고침</td>
+              <td>피드 프리페치, 정리 작업</td>
+              <td>실행 시각 보장 안 됨</td>
+            </tr>
+            <tr>
+              <td>푸시 기반 깨우기</td>
+              <td>메시지, 상태 동기화</td>
+              <td>남용 시 시스템/사용자 모두 싫어함</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="meta" style="margin-top:0.75rem">
+          <span class="tag api">BackgroundTasks · 해당 Background Modes</span>
+        </div>
+      </section>
+
+      <section id="intents">
+        <h2>15. Siri · 단축어 · 시스템 통합</h2>
+
+        <div class="card">
+          <h4>App Intents / Shortcuts</h4>
+          <p>
+            “물 마셨다고 기록해”, “다음 정류장 알려줘”처럼 앱 기능을 단축어·스포트라이트·시리에 노출.
+            습관·생산성·스마트홈·자동차 관련 상용에서 점점 중요해집니다.
+            위젯·컨트롤 센터·액션 버튼과도 연결되는 현대적 진입점입니다.
+          </p>
+          <div class="meta">
+            <span class="tag hot">상용 빈도 높음</span>
+            <span class="tag api">App Intents</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Spotlight 검색 인덱싱</h4>
+          <p>
+            앱 안의 메모/상품/문서가 시스템 검색에 뜨게. 콘텐츠형·생산성 앱의 재발견 경로입니다.
+          </p>
+          <div class="meta">
+            <span class="tag api">Core Spotlight</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="extensions">
+        <h2>16. 확장 기능 (App Extensions)</h2>
+        <p>본편 앱 옆에 붙어 시스템 곳곳에 스며드는 조각들입니다. 상용에서 “플랫폼 점유”에 중요합니다.</p>
+        <ul class="dense">
+          <li><strong>Share Extension</strong> — 사파리/사진에서 “이 앱으로 보내기”</li>
+          <li><strong>Safari Extension</strong> — 콘텐츠 차단, 페이지 도구 (정책 민감)</li>
+          <li><strong>Notification Service Extension</strong> — 푸시 수신화·복호화</li>
+          <li><strong>Keyboard Extension</strong> — 커스텀 키보드 (권한·신뢰 허들 큼)</li>
+          <li><strong>Widget / Live Activity / App Clip</strong> — 앞에서 다룸</li>
+        </ul>
+        <p class="note">확장마다 메모리·API 제한이 큽니다. “본편과 같은 앱”으로 생각하면 일정 사고가 납니다.</p>
+      </section>
+
+      <section id="limits">
+        <h2>17. 권한 · 프라이버시 · 심사 · 한계</h2>
+        <p>
+          아이폰의 진짜 특징은 “많은 센서”보다 <strong>센서를 쉽게 안 줌</strong>에 가깝습니다.
+          상용 기획은 기능 목록과 동시에 권한 스토리보드가 필요합니다.
+        </p>
+
+        <h3>자주 막히는 권한</h3>
+        <ul class="dense">
+          <li>카메라 / 마이크 / 사진</li>
+          <li>위치 (특히 Always)</li>
+          <li>알림</li>
+          <li>트래킹(ATT) — 광고·크로스앱 추적</li>
+          <li>연락처 / 캘린더 / 블루투스 / 헬스</li>
+        </ul>
+
+        <h3>상용 기획 체크</h3>
+        <div class="card">
+          <h4>권한이 가치보다 크면 제품이 죽음</h4>
+          <p>
+            “가입 전에 위치+사진+연락처”는 이탈률이 폭발합니다.
+            기능을 만지는 순간에 최소 권한만 요청하는 흐름이 정석에 가깝습니다.
+          </p>
+        </div>
+        <div class="card">
+          <h4>App Store 심사 언어</h4>
+          <p>
+            계정 삭제, 구독 설명, 아동/건강/금융 주장, 웹뷰 껍데기, 미완성 앱, 개인정보 라벨(영양 성분표).
+            “기술적으로 됨”과 “스토어에 나감”은 다릅니다.
+          </p>
+        </div>
+        <div class="card">
+          <h4>시뮬레이터의 거짓말</h4>
+          <p>
+            LiDAR, 진짜 카메라 성능, 푸시, 백그라운드, 결제, Face ID 등은
+            실기기 없이 “상용 품질”을 확정하기 어렵습니다. AR/RoomPlan류는 특히 그렇습니다.
+          </p>
+        </div>
+      </section>
+
+      <section id="stack">
+        <h2>18. 기술 스택 감각 (짧게, 기능과 연결)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>하고 싶은 일</th>
+              <th>자주 쓰는 층</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>일반 화면·폼·리스트</td>
+              <td>SwiftUI</td>
+            </tr>
+            <tr>
+              <td>커스텀 카메라/QR 스트림</td>
+              <td>AVFoundation (+ Vision)</td>
+            </tr>
+            <tr>
+              <td>가구 배치·공간 앵커</td>
+              <td>ARKit + RealityKit</td>
+            </tr>
+            <tr>
+              <td>방 구조 스캔</td>
+              <td>RoomPlan (+ LiDAR 유리)</td>
+            </tr>
+            <tr>
+              <td>구독·코인</td>
+              <td>StoreKit 2</td>
+            </tr>
+            <tr>
+              <td>잠금화면 진행 상태</td>
+              <td>ActivityKit</td>
+            </tr>
+            <tr>
+              <td>홈화면 요약</td>
+              <td>WidgetKit</td>
+            </tr>
+            <tr>
+              <td>걸음·운동 데이터</td>
+              <td>HealthKit</td>
+            </tr>
+            <tr>
+              <td>단축어·액션 버튼</td>
+              <td>App Intents</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          “정석 목록을 안다”는 종종 이 표처럼
+          <strong>문제 → 프레임워크 후보가 바로 떠오르는 상태</strong>를 말합니다.
+          그 다음 코드는 검색·나(에이전트)·Apple 문서면 됩니다.
+        </p>
+      </section>
+
+      <section id="map">
+        <h2>19. 기획할 때 쓰는 체크 맵</h2>
+        <p>아이디어가 떠오르면 아래로 한 번 통과시켜 보세요.</p>
+        <ol>
+          <li><strong>핵심 경험은 무엇인가?</strong> (스캔, 측정, 배치, 추적, 기록, 결제…)</li>
+          <li><strong>필수 기기 능력은?</strong> (카메라만? LiDAR? BLE 하드웨어? Watch?)</li>
+          <li><strong>권한이 몇 개고, 언제 묻나?</strong></li>
+          <li><strong>오프라인에서도 가치가 남나?</strong></li>
+          <li><strong>재방문 장치는?</strong> (위젯, 라이브 액티비티, 알림, 단축어)</li>
+          <li><strong>수익화는 StoreKit인가 실물 결제인가?</strong></li>
+          <li><strong>데모 와우 vs 매주 쓰는 효용</strong> 중 어디에 베팅하나?</li>
+          <li><strong>모델 파편화</strong>(Pro only)를 감수할 만큼의 해자인가?</li>
+        </ol>
+
+        <div class="callout">
+          LiDAR가 좋은 이유는 “센서가 멋있어서”가 아니라,
+          <em>공간을 데이터로 만드는 제품</em>이 가능해지기 때문입니다.
+          같은 방식으로 위젯은 “작은 UI”가 아니라 <em>재방문 채널</em>이고,
+          Live Activity는 <em>진행형 서비스의 잠금화면 점유</em>입니다.
+          기능을 이름 그대로가 아니라 <strong>제품 레버</strong>로 기억하면,
+          당신이 원했던 “더 좋은 아이템 / 더 좋은 기획”으로 연결됩니다.
+        </div>
+      </section>
+
+      <footer>
+        <p>
+          이 문서는 학습·기획용 개요입니다. OS 버전·모델별 지원·심사 정책은 바뀝니다.
+          실제 구현 전 Apple Developer 문서와 대상 기기에서 확인하세요.
+        </p>
+        <p>파일: <code>iphone-capabilities.html</code> — 브라우저로 열어 읽으면 됩니다.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
