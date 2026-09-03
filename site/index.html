@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Next3 — 할 일만 남깁니다</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg0: #f3efe6; --bg1: #e7eef0; --ink: #1c2422; --muted: #5e6b68;
+      --line: rgba(28,36,34,.12); --accent: #0f6e5c; --warn: #9a5b12; --max: 28rem;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100dvh; color: var(--ink);
+      font-family: "Pretendard Variable", Pretendard, sans-serif; line-height: 1.55;
+      background:
+        radial-gradient(900px 480px at 10% -10%, #dfece8 0%, transparent 55%),
+        radial-gradient(700px 420px at 100% 0%, #efe6d6 0%, transparent 50%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+    }
+    .shell { max-width: var(--max); margin: 0 auto; padding: 2.25rem 1.25rem 4rem; }
+    .brand { font-family: Fraunces, serif; font-weight: 700; font-size: 1.35rem; letter-spacing: -.03em; margin: 0; }
+    .tagline { margin: .35rem 0 0; color: var(--muted); }
+    .note { margin-top: 1rem; font-size: .85rem; color: var(--muted); }
+    .btn {
+      appearance: none; border: none; border-radius: 999px; padding: .85rem 1.1rem;
+      cursor: pointer; background: var(--ink); color: #f7f4ee; font-weight: 600; width: 100%;
+    }
+    .btn-ghost { background: transparent; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; margin-top: .65rem; }
+    .meta { margin-top: 2rem; display: flex; justify-content: space-between; align-items: baseline; }
+    .meta h2 { margin: 0; font-size: 1.15rem; }
+    .list { list-style: none; margin: 1.25rem 0 0; padding: 0; }
+    .row { padding: 1.15rem 0; border-top: 1px solid var(--line); animation: rise .45s ease both; }
+    .row:nth-child(1) { animation-delay: .05s; }
+    .row:nth-child(2) { animation-delay: .12s; }
+    .row:nth-child(3) { animation-delay: .18s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .row-title { margin: 0; font-weight: 650; font-size: 1.05rem; }
+    .row-due { margin: .35rem 0 0; color: var(--accent); font-weight: 600; font-size: .9rem; }
+    .row-skip { margin: .45rem 0 0; color: var(--muted); font-size: .88rem; }
+    .row-skip em { color: var(--warn); font-style: normal; font-weight: 600; }
+    .row-evidence { margin: .55rem 0 0; color: var(--muted); font-size: .82rem; font-family: ui-monospace, monospace; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <p class="brand">Next3</p>
+      <p class="tagline">서류는 넣기만. 할 일만 남깁니다.</p>
+    </header>
+
+    <section id="input">
+      <p class="note">심사·투표용 상시 데모입니다. 요약이 아니라 <strong>할 일만</strong> 남깁니다.</p>
+      <div style="margin-top:1.5rem">
+        <button class="btn" id="demoBtn" type="button">데모 서류로 해보기</button>
+      </div>
+    </section>
+
+    <section id="result" class="hidden">
+      <div class="meta">
+        <h2>할 일 3개</h2>
+        <button class="btn-ghost" id="backBtn" type="button">다른 서류</button>
+      </div>
+      <ul class="list" id="list"></ul>
+    </section>
+  </main>
+  <script>
+    const actions = [
+      {
+        title: "동의서·개인정보 동의서 제출하기",
+        due: "9월 12일(토)까지",
+        skip: "현장학습에 참여할 수 없습니다.",
+        evidence: "동의서 및 개인정보 활용 동의서를 9월 12일(토)까지 담임 선생님께 제출",
+      },
+      {
+        title: "실내화·필기구·물병 준비하기",
+        due: "9월 18일 현장학습 당일",
+        skip: "당일 활동에 필요한 준비물이 빠질 수 있습니다.",
+        evidence: "준비물: 실내화, 필기구, 개인 물병",
+      },
+      {
+        title: "도시락 싸기",
+        due: "9월 18일",
+        skip: "학교에서 급식이 제공되지 않습니다.",
+        evidence: "중식: 도시락 지참 (학교 급식 없음)",
+      },
+    ];
+    const input = document.getElementById("input");
+    const result = document.getElementById("result");
+    const list = document.getElementById("list");
+    document.getElementById("demoBtn").onclick = () => {
+      list.innerHTML = actions.map((a) => `
+        <li class="row">
+          <p class="row-title">${a.title}</p>
+          <p class="row-due">${a.due}</p>
+          <p class="row-skip"><em>안 하면</em> · ${a.skip}</p>
+          <p class="row-evidence">“${a.evidence}”</p>
+        </li>`).join("");
+      input.classList.add("hidden");
+      result.classList.remove("hidden");
+    };
+    document.getElementById("backBtn").onclick = () => {
+      result.classList.add("hidden");
+      input.classList.remove("hidden");
+    };
+  </script>
+</body>
+</html>
