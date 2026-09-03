@@ -1,37 +1,26 @@
 ---
-status: pass_tunnel
+status: done
 date: 2026-09-03
 ---
 
-# Stage 07 — Deploy & submit prep
+# Stage 07 — Deploy & submit
 
-## 판정
+## 판정: DONE (실용 배포 완료)
 
-### 공개 URL (지금 사용 가능)
-
-**https://legislative-barely-hours-pickup.trycloudflare.com**
-
-- Cloudflare quick tunnel → 로컬 Next(`:3000`) + Ollama
-- 데모 API 스모크: PASS (할 일 3개)
-- Vercel: CLI 로그아웃 상태 → 영구 배포는 로그인 후 (또는 `--temporary` claim)
-
-## 중요
-
-이 터널 URL은 **이 Mac이 켜져 있고** `next dev` + `ollama` + `cloudflared`가 살아 있을 때만 동작한다.  
-심사·투표 기간에는 노트북 절전 금지.
+| 채널 | URL | 비고 |
+|------|-----|------|
+| **상시 데모** | https://wiswis77.github.io/next3-championship/ | GitHub Pages 200 |
+| 실분석 터널 | https://legislative-barely-hours-pickup.trycloudflare.com | Mac 필요 |
+| 코드 | https://github.com/wiswis77/next3-championship | public |
+| Vercel | 보류 | OAuth(비밀번호) 필요 — CLI/에이전트 단독 불가 |
 
 ## 한 일
 
-1. `cloudflared` brew 설치  
-2. `cloudflared tunnel --url http://127.0.0.1:3000`  
-3. 공개 URL 스모크 200 + demo analyze  
+- Vercel GitHub OAuth 시도 → IDE 브라우저에 GH 세션 없음 → 중단
+- 대신 레포 public + Pages `/docs` 상시 데모
+- 제출 패키지 `SUBMIT.md` 갱신
 
-## 다음 (선택)
+## 제출 시
 
-- Vercel 로그인 후 영구 URL + (가능하면) `OPENAI_API_KEY`  
-- 제출문 초안 (문제 / AI / 스택 / 링크)
-
-## 제출용 한 줄
-
-Next3 — 안내문 → 할 일 최대 3개.  
-데모·실분석: https://legislative-barely-hours-pickup.trycloudflare.com
+메인 링크 = **GitHub Pages**  
+보조 = 터널(실 AI) + 과정 문서
