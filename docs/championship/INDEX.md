@@ -21,12 +21,8 @@
 
 ## 현재 위치
 
-→ **제출 준비 완료에 가까움.**  
-Live: https://legislative-barely-hours-pickup.trycloudflare.com  
-제출문: [SUBMIT.md](./SUBMIT.md)
+→ **배포·제출 패키지 완료**
 
-### 다음 (우선순위)
-
-1. 심사 기간 Mac 켜둠 + 터널 유지 (`scripts/start-public.sh`)  
-2. (선택) `vercel login` 한 번 → 영구 URL (데모는 클라우드에서도 동작)  
-3. 접수·제출 폼에 SUBMIT.md 내용 붙여넣기
+- 상시: https://wiswis77.github.io/next3-championship/
+- 실AI: https://legislative-barely-hours-pickup.trycloudflare.com
+- 제출문: [SUBMIT.md](./SUBMIT.md)
